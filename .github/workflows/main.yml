@@ -1,12 +1,30 @@
-
 name: GitHub Actions Demo
-on: [push]
+on: 
+ push:
   
 jobs:
-  Explore-GitHub-Actions:
+  action-pull-request:
+  #Explore-GitHub-Actions:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
-        with:
-          path: master
+      #  with:
+      #    path: master
+      #- uses: actions/labeler@v2
+      #  with:
+      #    repo-token: ${{ secrets.TOKEN_GITHUB }}
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+      - name: install python GitPython
+        run: pip3 install GitPython
+      - name: install python Gidgethub
+        run: pip3 install gidgethub
+      - name: install python Aiohttp
+        run: pip3 install aiohttp
+      - name: install python Dotenv
+        run: pip3 install python-dotenv
+      - name: install python decouple
+        run: pip3 install python-decouple
+      - run: python3 pythontest.py
