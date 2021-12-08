@@ -9,8 +9,8 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
-      #  with:
-      #    path: master
+        with:
+           path: master
       #- uses: actions/labeler@v2
       #  with:
       #    repo-token: ${{ secrets.TOKEN_GITHUB }}
