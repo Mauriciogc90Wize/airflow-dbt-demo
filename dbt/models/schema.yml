@@ -1,82 +1,290 @@
 version: 2
-
 models:
-  - name: customers
-    description: This table has basic information about a customer, as well as some derived facts based on a customer's orders
-
-    columns:
-      - name: customer_id
-        description: This is a unique identifier for a customer
-        tests:
-          - unique
-          - not_null
-
-      - name: first_name
-        description: Customer's first name. PII.
-
-      - name: last_name
-        description: Customer's last name. PII.
-
-      - name: first_order
-        description: Date (UTC) of a customer's first order
-
-      - name: most_recent_order
-        description: Date (UTC) of a customer's most recent order
-
-      - name: number_of_orders
-        description: Count of the number of orders a customer has placed
-
-      - name: total_order_amount
-        description: Total value (AUD) of a customer's orders
-
-  - name: orders
-    description: This table has basic information about orders, as well as some derived facts based on payments
-
-    columns:
-      - name: order_id
-        tests:
-          - unique
-          - not_null
-        description: This is a unique identifier for an order
-
-      - name: customer_id
-        description: Foreign key to the customers table
-        tests:
-          - not_null
-          - relationships:
-              to: ref('customers')
-              field: customer_id
-
-      - name: order_date
-        description: Date (UTC) that the order was placed
-
-      - name: status
-        description: '{{ doc("orders_status") }}'
-        tests:
-          - accepted_values:
-              values: ['placed', 'shipped', 'completed', 'return_pending', 'returned']
-
-      - name: amount
-        description: Total amount (AUD) of the order
-        tests:
-          - not_null
-
-      - name: credit_card_amount
-        description: Amount of the order (AUD) paid for by credit card
-        tests:
-          - not_null
-
-      - name: coupon_amount
-        description: Amount of the order (AUD) paid for by coupon
-        tests:
-          - not_null
-
-      - name: bank_transfer_amount
-        description: Amount of the order (AUD) paid for by bank transfer
-        tests:
-          - not_null
-
-      - name: gift_card_amount
-        description: Amount of the order (AUD) paid for by gift card
-        tests:
-          - not_null
+- name: categories
+  description: '"Absorb Categories, extracted by Category Controller API endpoint"'
+  columns:
+  - name: Id
+    description: Category globally unique identifier
+  - name: ParentId
+    description: The parent category Id, it's the value on Id field of another record
+      into the same table
+  - name: Name
+    description: Category name
+  - name: Description
+    description: Category long description
+- name: courses
+  description: '"Absorb Courses catalog, extracted by Courser Controller API endpoint"'
+  columns:
+  - name: CourseType
+    description: Course type, e.g. OnlineCourse
+  - name: Id
+    description: Course globally unique identifier
+  - name: Name
+    description: Course name
+  - name: Description
+    description: Course long description in html encoded value
+  - name: Notes
+    description: Course notes in html encoded value
+  - name: ExternalId
+    description: Couser external identifier
+  - name: AccessDate
+    description: None additional information about this field
+  - name: ExpireType
+    description: 'Course type expire, Enum: 0=None, 1=Date, 2=Duration'
+  - name: ExpireDuration
+    description: 'Course expire. Object:                 Years=Number of years,                 Months:
+      number of months                 Days: number of days                 Hours:
+      number of hours'
+  - name: ExpiryDate
+    description: Course expiry date
+  - name: ActiveStatus
+    description: 'Course status, Enum: 0=Active, 1=Inactive, 2=Pending'
+  - name: TagIds
+    description: Collection of Tag Id's
+  - name: ResourceIds
+    description: Collection of Resource Id's
+  - name: EditorIds
+    description: Collection of Editor Id's
+  - name: Prices
+    description: Collection of PriceModel
+  - name: CompetencyDefinitionIds
+    description: Collection of Competency Definition Id's
+  - name: PrerequisiteCourseIds
+    description: Collection of Prerequisite Course Id's
+  - name: PostEnrollmentCourseIds
+    description: Collection of Course Id's
+  - name: AllowCourseEvaluation
+    description: If Course allows evaluation
+  - name: CategoryId
+    description: Course Category Id
+  - name: CertificateUrl
+    description: Course certification URL
+  - name: Audience
+    description: Course Audience
+  - name: Goals
+    description: Course Goals
+  - name: Vendor
+    description: Course description
+  - name: CompanyCost
+    description: Course cost
+  - name: LearnerCost
+    description: Course lerner Cost
+  - name: CompanyTime
+    description: Course company time
+  - name: LearnerTime
+    description: Course lerner time
+- name: curriculums
+  description: '"Absorb Curriculums, extracted by Curriculums Controller API endpoint"'
+  columns:
+  - name: IsPacingEnabled
+    description: Curriculm Pacing
+  - name: CurriculumGroupIds
+    description: Collection of Group Id's
+  - name: Id
+    description: Curriculum globally unique identifier
+  - name: Name
+    description: Curriculum name
+  - name: Description
+    description: Curriculum description
+  - name: Notes
+    description: Curriculum notes
+  - name: ExternalId
+    description: Curriculum external Id
+  - name: AccessDate
+    description: Curriculum access date
+  - name: ExpireType
+    description: 'Curriculum expire type. Enum: 0=None, 1=Date, 2=Duration'
+  - name: ExpireDuration
+    description: 'Curriculum expire duration, Object:                 Years=number
+      of years,                 Months=number of months                 Days=number
+      of days                 Hours=number of hours'
+  - name: ExpiryDate
+    description: Curriculum expiry date
+  - name: ActiveStatus
+    description: 'Curriculum active status. Enum: 0=Active, 1=Inactive, 2=Pending'
+  - name: TagIds
+    description: Collection of Tag Id's
+  - name: ResourceIds
+    description: Collection of resource Id's
+  - name: EditorIds
+    description: Collection of editors Id's
+  - name: Prices
+    description: Collection of PricesModel
+  - name: CompetencyDefinitionIds
+    description: Collection of competency Id's
+  - name: PrerequisiteCourseIds
+    description: Collection of courses Id's
+  - name: PostEnrollmentCourseIds
+    description: Collection of courses Id's
+  - name: AllowCourseEvaluation
+    description: If Curriculum allows evaluation
+  - name: CategoryId
+    description: Curriculum category Id
+  - name: CertificateUrl
+    description: Curriculum certificate URL
+  - name: Audience
+    description: Curriculum audience
+  - name: Goals
+    description: Curriculum goals
+  - name: Vendor
+    description: Curriculum vendor
+  - name: CompanyCost
+    description: Curriculum company cost
+  - name: LearnerCost
+    description: Curriculum learner cost
+  - name: CompanyTime
+    description: Curriculum company time
+  - name: LearnerTime
+    description: Curriculum learner time
+- name: departments
+  description: '"Absorb Departments, extracted by Departments Controller API endpoint"'
+  columns:
+  - name: Id
+    description: Department globally unique identifier
+  - name: Name
+    description: Department name
+  - name: UseDepartmentContactDetails
+    description: If Department has contact details
+  - name: CompanyName
+    description: Department company name
+  - name: PhoneNumber
+    description: Department phone number
+  - name: EmailAddress
+    description: Department email address
+  - name: ExternalId
+    description: Department external Id
+  - name: ParentId
+    description: Department parent deparment Id
+  - name: CurrencyId
+    description: Department currency Id
+- name: enrollments
+  description: '"Absorb Enrollments, extracted by Enrollments Controller API endpoint.\nTo
+    get this data is necessary iterate into this endpoint and User Controller API
+    endpoint"'
+  columns:
+  - name: id
+    description: Enrollment identifier
+  - name: CourseId
+    description: Course identifier
+  - name: CourseName
+    description: Name of the course
+  - name: Progress
+    description: Percentage of course completed
+  - name: Score
+    description: Score in percentage
+  - name: Status
+    description: 'The enrollment status. Enum: 0=NotStarted 1=InProgress 2=PendingApproval                     3=Complete
+      4=NotComplete 5=Failed 6=Declined 7=PendingEvaluationRequired 8=OnWaitlist                     9=Absent
+      10=NotApplicable 11=PendingProctor 12=ReadyForReview'
+  - name: DateCompleted
+    description: The date the enrollment was completed
+  - name: DateExpires
+    description: The date the enrollment expires
+  - name: FullName
+    description: Learner's full name
+  - name: JobTitle
+    description: Learner's job title
+  - name: CourseVersionId
+    description: Enrollment is for a specific course version
+  - name: UserId
+    description: Learner identifier
+  - name: AcceptedTermsAndConditions
+    description: Learner has accepted the terms and conditions
+  - name: TimeSpent
+    description: The length of time the learner has spent in the course
+  - name: DateStarted
+    description: The date the learner started the course
+  - name: EnrollmentKeyId
+    description: When present, indicates the enrollment key used to enroll into the
+      course
+  - name: CertificateId
+    description: When present, indicates the id of the certificate awarded for completing
+      the course
+  - name: Credits
+    description: When present, indicates the credits accumulated for the course
+  - name: IsActive
+    description: Indicates if the enrollment is the current (active) enrollment or
+      a historical enrollment
+- name: groups
+  description: '"Absorb Groups, extracted by Groups Controller API endpoint"'
+  columns:
+  - name: Id
+    description: Group globally unique identifier
+  - name: Name
+    description: Group name
+  - name: IsAutomatic
+    description: If Group is automatic
+  - name: UserIds
+    description: Collection of User Id's
+- name: users
+  description: '"Absorb Users, extracted by User Controller API endpoint"'
+  columns:
+  - name: Id
+    description: User globally unique identifier
+  - name: DepartmentId
+    description: User department Id
+  - name: FirstName
+    description: User first name
+  - name: MiddleName
+    description: User middle name
+  - name: LastName
+    description: User last name
+  - name: Username
+    description: User name
+  - name: Password
+    description: Password Required for User Creation
+  - name: EmailAddress
+    description: User email address
+  - name: ExternalId
+    description: User external Id
+  - name: CcEmailAddresses
+    description: List of email addresses, maximum 5 (MaxCcEmailSize)
+  - name: LanguageId
+    description: User language Id
+  - name: Gender
+    description: 'User gender. Enum: 0=None, 1=Male, 2=Female'
+  - name: Address
+    description: User address
+  - name: Address2
+    description: User address 2nd field
+  - name: City
+    description: User city
+  - name: ProvinceId
+    description: User province Id
+  - name: CountryId
+    description: User country Id
+  - name: PostalCode
+    description: User Zip
+  - name: Phone
+    description: User phone
+  - name: EmployeeNumber
+    description: User employee number
+  - name: Location
+    description: User Location
+  - name: JobTitle
+    description: User job title
+  - name: ReferenceNumber
+    description: User reference number
+  - name: DateHired
+    description: User hired datetime
+  - name: DateTerminated
+    description: User terminated datetime
+  - name: Notes
+    description: User extra notes
+  - name: CustomFields
+    description: 'User custom fields. Object Wizeline data in following items:                 ''String1''=gender,
+      ''String2=manager, ''String4''=billable, ''String5''=time available'
+  - name: RoleIds
+    description: User role Id's
+  - name: ActiveStatus
+    description: 'User active. Enum: 0=Active, 1=Inactive, 2=Pending'
+  - name: IsLearner
+    description: If User is learner
+  - name: IsAdmin
+    description: If User is admin
+  - name: IsInstructor
+    description: If User is instructor
+  - name: SupervisorId
+    description: If User is supervisor
+  - name: HasUsername
+    description: If User has username
